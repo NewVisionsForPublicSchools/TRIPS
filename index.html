@@ -3,6 +3,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
 
   <link data-require="bootstrap-css@*" data-semver="3.3.5" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
   
@@ -20,14 +21,22 @@
   <div class="container-fluid">
   
       <!-- Home page -->
-      <div class="page" id="home">
-        <div class="row vertical-center">
-          <a class="btn btn-lg btn-primary" type="button" id="subReqBtn">Submit Supply Request</a>
-          <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" disabled="disabled">
-            Process Supply Requests <!-- <span class="badge">4</span> -->
-          </button>
+      <div class="page" id="index">
+        <div>
+          <div class="row text-center">
+            <h1 class="text-nvBlue">AMS IV Trip Requests</h1>
+          </div>
+          <div class="row vertical-center">
+            <a class="btn btn-lg btn-primary" type="button" id="subTrpBtn">Submit Trip Request</a>
+            <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" disabled="disabled">
+              Process Supply Requests <!-- <span class="badge">4</span> -->
+            </button>
+          </div>
         </div>
       </div>
+      
+      <!-- Submit Request Form -->
+      <div class="page" id="subTrpFormPage" style="display:none"><?!= include('submit_trip_form'); ?></div>
       
   </div>
 
@@ -38,36 +47,36 @@
 <script>
 $(function(){
 
-  $(document).ready(loadHomeActions);
-  $('#subReqBtn').click(loadReqForm);
-  $('#procReqBtn').click(loadProcPage);
+//  $(document).ready(loadIndexActions);
+  $('#subTrpBtn').click(loadTrpForm);
+//  $('#procReqBtn').click(loadProcPage);
   
-  function loadHomeActions(){
-    google.script.run.withSuccessHandler(updateActionItems).getRequestActionItems();
-    google.script.run.withSuccessHandler(verifyUser).validateUser();
-  }
+//  function loadIndexActions(){
+//    google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
+//    google.script.run.withSuccessHandler(verifyUser).validateUser();
+//  }
   
-  function loadReqForm(resultHtml){
+  function loadTrpForm(resultHtml){
     $('.page').hide();
-    $('#reqForm').show();
-    $('#resetReq').click();
+    $('#subTrpFormPage').show();
+//    $('#resetTrp').click();
   }
   
-  function loadProcPage(){
-    $('.page').hide();
-    $('#procPage').show();
-  }
+//  function loadProcPage(){
+//    $('.page').hide();
+//    $('#procPage').show();
+//  }
   
-  function verifyUser(answer){
-    if(answer == true){
-      $('.btn-validated').prop('disabled', false);
-    }
-  }
-  
-  function updateActionItems(resultHtml){
-    var $output = $('#actionItems');
-    $output.html(resultHtml);
-  }    
+//  function verifyUser(answer){
+//    if(answer == true){
+//      $('.btn-validated').prop('disabled', false);
+//    }
+//  }
+//  
+//  function updateActionItems(resultHtml){
+//    var $output = $('#actionItems');
+//    $output.html(resultHtml);
+//  }    
 
 });
 
