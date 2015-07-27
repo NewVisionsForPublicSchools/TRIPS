@@ -1,7 +1,7 @@
 <div class="col-md-8 col-md-offset-2 text-center">
   <h1 class="text-nvBlue">Submit Trip Request</h1>
   <br>
-  <form class="form-horizontal" id="trpForm">
+  <form class="form-horizontal" id="trpForm" method="get" onsubmit="return false">
   
    <div class="form-group">
       <label class="control-label col-md-3" for="requestor"></label>
@@ -131,16 +131,16 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon">Students</span>
-          <input type="file" class="form-control col-md-6" name="trpStudents" id="trpStudents" required="true"
-          data-toggle="popover" date-trigger="hover" data-placement="right"
-          data-content="The Students file must be a spreadsheet containing both student names and OSIS numbers">
+          <button id="trpStudents" class="form-control col-md-6">Select a file</button>
         </div> <!-- input-group -->
+        <p id='result'></p>
       </div>
     </div> <!-- form-gorup -->
     
     <div class="pull-center">
       <button class="btn btn-default" id="newReqCancelBtn">Cancel</button>
-      <button class="btn btn-primary" type="submit" id="newReqSubBtn">Submit Trip Request</button> 
+      <input class="btn btn-primary" type="button" id="newReqSubBtn"
+      onclick="google.script.run.withSuccessHandler().submitNewTripRequest(this.form)" value="Submit Trip Request">
     </div>
   
   </form>
@@ -151,11 +151,68 @@
 <script>
   $(function(){
     
+    var DEVELOPER_KEY = 'AIzaSyCZbnbE1NGsNzRzLRfe7AT2PkqZw_g0OQU';
+    var DIALOG_DIMENSIONS = {width: 600, height: 425};
+    var pickerApiLoaded = false;
+    
     $('#trpTrans').on("change", displayOther);
     $('#trpStudents').popover();
     $('#newReqCancelBtn').click(cancelTrpReq);
-//    $('#newReqSubBtn').submit(subNewTripReq);
+    $('#trpStudents').click(getOAuthToken);
     
+    gapi.load('picker', {'callback': function() {
+      pickerApiLoaded = true;
+    }});
+
+     
+    function getOAuthToken() {
+      google.script.run.withSuccessHandler(createPicker)
+          .withFailureHandler(showError).getOAuthToken();
+    }
+    
+    function createPicker(token) {
+      console.log(pickerApiLoaded + " | " + token);
+      if (pickerApiLoaded && token) {
+        console.log("Creating picker");
+        var picker = new google.picker.PickerBuilder()
+            // Instruct Picker to display only spreadsheets in Drive. For other
+            // views, see https://developers.google.com/picker/docs/#otherviews
+            .addView(google.picker.ViewId.DOCS)
+            // Hide the title bar since an Apps Script dialog already has a title.
+            .hideTitleBar()
+            .setOAuthToken(token)
+            .setDeveloperKey(DEVELOPER_KEY)
+            .setCallback(pickerCallback)
+            .setOrigin('https://script.google.com')
+            // Instruct Picker to fill the dialog, minus 2 pixels for the border.
+            .setSize(DIALOG_DIMENSIONS.width - 2,
+                DIALOG_DIMENSIONS.height - 2)
+            .build();
+        picker.setVisible(true);
+      } else {
+        showError('Unable to load the file picker.');
+      }
+    }
+    
+    function pickerCallback(data) {
+      var action = data[google.picker.Response.ACTION];
+      if (action == google.picker.Action.PICKED) {
+        var doc = data[google.picker.Response.DOCUMENTS][0];
+        var id = doc[google.picker.Document.ID];
+        var url = doc[google.picker.Document.URL];
+        var title = doc[google.picker.Document.NAME];
+        document.getElementById('result').innerHTML =
+            '<b>You chose:</b><br>Name: <a href="' + url + '">' + title +
+            '</a><br>ID: ' + id;
+      } else if (action == google.picker.Action.CANCEL) {
+        document.getElementById('result').innerHTML = 'Picker canceled.';
+      }
+    }
+    
+    function showError(message) {
+      document.getElementById('result').innerHTML = 'Error: ' + message;
+    }
+     
     function displayOther(){
       var $trans = $('#trpTrans').val();
       $('#trpOthrTrans').val('');
@@ -168,6 +225,19 @@
     
     function cancelTrpReq(){
       $('#homeBtn').trigger("click");
+    }
+    
+    function subNewTripReq(){
+      var $formObj = $('form')[0];
+      var $input = $('#trpStudents');
+      var $file = $input[0].files[0];
+      console.log($file);
+      var reader = new FileReader();
+      console.log($formObj.trpStudents);
+      console.log($formObj);
+      console.log($formObj.trpStudents);
+        debugger;
+       google.script.run.withSuccessHandler().submitNewTripRequest($formObj);
     }
     
   });
