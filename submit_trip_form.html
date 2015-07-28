@@ -42,6 +42,7 @@
             <span class="input-group-addon">Trip Date</span>
             <input type="date" class="form-control col-md-6" name="trpDate"  id="trpDate" required="true">
           </div> <!-- input-group -->
+          <p id="dateMsg" class="text-nvRed"></p>
         </div>
       </div> <!-- form-gorup -->
       
@@ -160,6 +161,7 @@
     $('#trpStudents').popover();
     $('#newReqCancelBtn').click(cancelTrpReq);
     $('#trpForm').submit(processForm);
+    $('#trpDate').on("change", validateTripDate);
 
     function processForm(){
       FORMOBJ.requestor = $('#requestor').val();
@@ -197,6 +199,18 @@
       $output.html(resultHtml);
       $('#trpFormSub').hide();
       $('#trpSubConf').show();
+    }
+    
+    function validateTripDate(){
+      var today = new Date().getTime();
+      var $tripDate = new Date($('#trpDate').val()).getTime();
+      
+      if($tripDate - today < 1814400000){
+        $('#dateMsg').html('The date of the trip must be at least 3 weeks from today');
+      }
+      else{
+        $('#dateMsg').html('');
+      }
     }
     
   });
