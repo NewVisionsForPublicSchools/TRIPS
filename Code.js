@@ -16,3 +16,20 @@ function include(filename) {
       .setSandboxMode(HtmlService.SandboxMode.IFRAME)
       .getContent();
 }
+
+
+
+function getOAuthToken() {
+  DriveApp.getRootFolder();
+  return ScriptApp.getOAuthToken();
+}
+
+
+
+function getDevKey(){
+  var test, devKey;
+  PropertiesService.getScriptProperties().setProperty('testKey', 'Working');
+  devKey = PropertiesService.getScriptProperties().getProperty('devKey');
+  PropertiesService.getScriptProperties().setProperty('testKey', devKey);
+  return devKey;
+}

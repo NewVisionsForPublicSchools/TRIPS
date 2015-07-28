@@ -126,21 +126,30 @@
         </div>
       </div> <!-- form-gorup -->
       
-      <div class="form-group" id="studentsGrp">
+      <!-- <div class="form-group" id="studentsGrp">
       <label class="control-label col-md-3" for="trpStudents"></label>
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon">Students</span>
-          <button id="trpStudents" class="form-control col-md-6">Select a file</button>
-        </div> <!-- input-group -->
+          <button id="trpStudents" name="trpStudents" class="form-control col-md-6">Select a file</button>
+        </div> <!-- input-group
         <p id='result'></p>
+      </div>
+    </div> <!-- form-gorup -->
+    
+    <div class="form-group" id="studentsGrp">
+      <label class="control-label col-md-3" for="trpStudents"></label>
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon">Students</span>
+          <textarea id="trpStudents" name="trpStudents" class="form-control col-md-6"></textarea>
+        </div> <!-- input-group -->
       </div>
     </div> <!-- form-gorup -->
     
     <div class="pull-center">
       <button class="btn btn-default" id="newReqCancelBtn">Cancel</button>
-      <input class="btn btn-primary" type="button" id="newReqSubBtn"
-      onclick="google.script.run.withSuccessHandler().submitNewTripRequest(this.form)" value="Submit Trip Request">
+      <input class="btn btn-primary" type="submit" id="newReqSubBtn" value="Submit Trip Request">
     </div>
   
   </form>
@@ -151,40 +160,63 @@
 <script>
   $(function(){
     
+    var FORMOBJ = {};
     var DEVELOPER_KEY = 'AIzaSyCZbnbE1NGsNzRzLRfe7AT2PkqZw_g0OQU';
+    
+//    google.script.run.withSuccessHandler(getKey).getDevKey();
+//    console.log(DEVELOPER_KEY);
     var DIALOG_DIMENSIONS = {width: 600, height: 425};
     var pickerApiLoaded = false;
     
     $('#trpTrans').on("change", displayOther);
     $('#trpStudents').popover();
     $('#newReqCancelBtn').click(cancelTrpReq);
-    $('#trpStudents').click(getOAuthToken);
+//    $('#trpStudents').click(getOAuthToken);
+    $('#trpForm').submit(processForm);
     
     gapi.load('picker', {'callback': function() {
       pickerApiLoaded = true;
     }});
 
-     
+    
+//    function getKey(key){
+//      var DEVELOPER_KEY = key;
+//    }
+    
+    function processForm(){
+//      FORMOBJ.requestor = $('#requestor').val();
+//      FORMOBJ.trip_name = $('#trpName').val();
+//      FORMOBJ.description = $('#trpDesc').val();
+//      FORMOBJ.trip_date = $('#trpDate').val();
+//      FORMOBJ.cost_per_student = $('#trpCostStud').val();
+//      FORMOBJ.collector = $('#collector').val();
+//      FORMOBJ.total_cost = $('#trpCostTot').val();
+//      FORMOBJ.transportation = $('#trpTrans').val();
+//      FORMOBJ.other_transportation = $('#trpOthrTrans').val();
+//      FORMOBJ.destination = $('#trpDest').val();
+//      FORMOBJ.number_of_students = $('#trpNumStud').val();
+//      FORMOBJ.students = $('#trpStudents').val();
+//      console.log(FORMOBJ);
+
+      var $formObj = $('#trpForm').serialize();
+      console.log($formObj);
+      google.script.run.withSuccessHandler().submitNewTripRequest($formObj);
+    }
+    
     function getOAuthToken() {
       google.script.run.withSuccessHandler(createPicker)
           .withFailureHandler(showError).getOAuthToken();
     }
     
     function createPicker(token) {
-      console.log(pickerApiLoaded + " | " + token);
       if (pickerApiLoaded && token) {
-        console.log("Creating picker");
         var picker = new google.picker.PickerBuilder()
-            // Instruct Picker to display only spreadsheets in Drive. For other
-            // views, see https://developers.google.com/picker/docs/#otherviews
             .addView(google.picker.ViewId.DOCS)
-            // Hide the title bar since an Apps Script dialog already has a title.
             .hideTitleBar()
             .setOAuthToken(token)
             .setDeveloperKey(DEVELOPER_KEY)
             .setCallback(pickerCallback)
             .setOrigin('https://script.google.com')
-            // Instruct Picker to fill the dialog, minus 2 pixels for the border.
             .setSize(DIALOG_DIMENSIONS.width - 2,
                 DIALOG_DIMENSIONS.height - 2)
             .build();
@@ -201,6 +233,7 @@
         var id = doc[google.picker.Document.ID];
         var url = doc[google.picker.Document.URL];
         var title = doc[google.picker.Document.NAME];
+        FORMOBJ.fileId = id;
         document.getElementById('result').innerHTML =
             '<b>You chose:</b><br>Name: <a href="' + url + '">' + title +
             '</a><br>ID: ' + id;
