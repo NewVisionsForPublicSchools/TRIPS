@@ -1,158 +1,152 @@
 <div class="col-md-8 col-md-offset-2 text-center">
   <h1 class="text-nvBlue">Submit Trip Request</h1>
   <br>
-  <form class="form-horizontal" id="trpForm" method="get" onsubmit="return false">
+  <div id="trpFormSub">
+    <form class="form-horizontal" id="trpForm" method="get" onsubmit="return false">
+    
+     <div class="form-group">
+        <label class="control-label col-md-3" for="requestor"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Name</span>
+            <input type="text" class="form-control col-md-6" name="requestor" id="requestor" placeholder="Requestor Full Name"
+            required="true">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="trpName"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Trip</span>
+            <input type="text" class="form-control col-md-6" name="trpName"  id="trpName" placeholder="Trip Name" required="true">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="trpDesc"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Description</span>
+            <textarea rows="4" class="form-control col-md-6" name="trpDesc"  id="trpDesc"></textarea>
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="trpDate"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Trip Date</span>
+            <input type="date" class="form-control col-md-6" name="trpDate"  id="trpDate" required="true">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+          <label class="control-label col-md-3" for="trpCostStud"></label>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-addon">Cost/Student</span>
+              <input type="number" min="0" class="form-control col-md-3" name="trpCostStud" id="trpCostStud"
+                     required="true" step=".01" pattern="[0-9]+([\.|,][0-9]+)?" placeholder="0.00">
+            </div> <!-- input-group -->
+          </div>
+        </div> <!-- form-gorup -->
+        
+        <div class="form-group">
+        <label class="control-label col-md-3" for="collector"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Collector</span>
+            <input type="text" class="form-control col-md-6" name="collector" id="collector" placeholder="Who will be collecting the money"
+            required="true">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+          <label class="control-label col-md-3" for="trpCostTot"></label>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-addon">Total Cost</span>
+              <input type="number" min="0" class="form-control col-md-3" name="trpCostTot" id="trpCostTot"
+              step=".01" pattern="[0-9]+([\.|,][0-9]+)?" placeholder="0.00">
+            </div> <!-- input-group -->
+          </div>
+        </div> <!-- form-gorup -->
+        
+        <div class="form-group">
+        <label class="control-label col-md-3" for="trpTrans"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Transportation</span>
+            <select class="form-control col-md-6" name="trpTrans" id="trpTrans" required="true">
+              <option>Yellow School Bus</option>
+              <option>Chartered Bus</option>
+              <option>Train</option>
+              <option>Walk</option>
+              <option>Other</option>
+            </select>
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group" id="otherTransGrp" style="display:none">
+        <label class="control-label col-md-3" for="trpOthrTrans"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">If Other</span>
+            <input type="text" class="form-control col-md-6" name="trpOthrTrans" id="trpOthrTrans" placeholder="Other Transportation">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      
+        <div class="form-group">
+        <label class="control-label col-md-3" for="trpDest"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Destination</span>
+            <input type="text" class="form-control col-md-6" name="trpDest" id="trpDest" placeholder="Destination"
+            required="true">
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+          <label class="control-label col-md-3" for="trpNumStud"></label>
+          <div class="col-md-4">
+            <div class="input-group">
+              <span class="input-group-addon">No. Students</span>
+              <input type="number" min="0" class="form-control col-md-3" name="trpNumStud" id="trpNumStud"
+                     required="true" step="1" placeholder="Number of Students">
+            </div> <!-- input-group -->
+          </div>
+        </div> <!-- form-gorup -->
+      
+      <div class="form-group" id="studentsGrp">
+        <label class="control-label col-md-3" for="trpStudents"></label>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-addon">Students</span>
+            <textarea id="trpStudents" name="trpStudents" class="form-control col-md-6"></textarea>
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="pull-center">
+        <button class="btn btn-default" id="newReqCancelBtn">Cancel</button>
+        <input class="btn btn-primary" type="submit" id="newReqSubBtn" value="Submit Trip Request">
+      </div>
+    
+    </form>
+  </div> <!-- Form submission div -->
   
-   <div class="form-group">
-      <label class="control-label col-md-3" for="requestor"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Name</span>
-          <input type="text" class="form-control col-md-6" name="requestor" id="requestor" placeholder="Requestor Full Name"
-          required="true">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-      <label class="control-label col-md-3" for="trpName"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Trip</span>
-          <input type="text" class="form-control col-md-6" name="trpName"  id="trpName" placeholder="Trip Name" required="true">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-      <label class="control-label col-md-3" for="trpDesc"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Description</span>
-          <textarea rows="4" class="form-control col-md-6" name="trpDesc"  id="trpDesc"></textarea>
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-      <label class="control-label col-md-3" for="trpDate"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Trip Date</span>
-          <input type="date" class="form-control col-md-6" name="trpDate"  id="trpDate" required="true">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-        <label class="control-label col-md-3" for="trpCostStud"></label>
-        <div class="col-md-4">
-          <div class="input-group">
-            <span class="input-group-addon">Cost/Student</span>
-            <input type="number" min="0" class="form-control col-md-3" name="trpCostStud" id="trpCostStud"
-                   required="true" step=".01" pattern="[0-9]+([\.|,][0-9]+)?" placeholder="0.00">
-          </div> <!-- input-group -->
-        </div>
-      </div> <!-- form-gorup -->
-      
-      <div class="form-group">
-      <label class="control-label col-md-3" for="collector"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Collector</span>
-          <input type="text" class="form-control col-md-6" name="collector" id="collector" placeholder="Who will be collecting the money"
-          required="true">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-        <label class="control-label col-md-3" for="trpCostTot"></label>
-        <div class="col-md-4">
-          <div class="input-group">
-            <span class="input-group-addon">Total Cost</span>
-            <input type="number" min="0" class="form-control col-md-3" name="trpCostTot" id="trpCostTot"
-            step=".01" pattern="[0-9]+([\.|,][0-9]+)?" placeholder="0.00">
-          </div> <!-- input-group -->
-        </div>
-      </div> <!-- form-gorup -->
-      
-      <div class="form-group">
-      <label class="control-label col-md-3" for="trpTrans"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Transportation</span>
-          <select class="form-control col-md-6" name="trpTrans" id="trpTrans" required="true">
-            <option>Yellow School Bus</option>
-            <option>Chartered Bus</option>
-            <option>Train</option>
-            <option>Walk</option>
-            <option>Other</option>
-          </select>
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group" id="otherTransGrp" style="display:none">
-      <label class="control-label col-md-3" for="trpOthrTrans"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">If Other</span>
-          <input type="text" class="form-control col-md-6" name="trpOthrTrans" id="trpOthrTrans" placeholder="Other Transportation">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    
-      <div class="form-group">
-      <label class="control-label col-md-3" for="trpDest"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Destination</span>
-          <input type="text" class="form-control col-md-6" name="trpDest" id="trpDest" placeholder="Destination"
-          required="true">
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group">
-        <label class="control-label col-md-3" for="trpNumStud"></label>
-        <div class="col-md-4">
-          <div class="input-group">
-            <span class="input-group-addon">No. Students</span>
-            <input type="number" min="0" class="form-control col-md-3" name="trpNumStud" id="trpNumStud"
-                   required="true" step="1" placeholder="Number of Students">
-          </div> <!-- input-group -->
-        </div>
-      </div> <!-- form-gorup -->
-      
-      <!-- <div class="form-group" id="studentsGrp">
-      <label class="control-label col-md-3" for="trpStudents"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Students</span>
-          <button id="trpStudents" name="trpStudents" class="form-control col-md-6">Select a file</button>
-        </div> <!-- input-group
-        <p id='result'></p>
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="form-group" id="studentsGrp">
-      <label class="control-label col-md-3" for="trpStudents"></label>
-      <div class="col-md-6">
-        <div class="input-group">
-          <span class="input-group-addon">Students</span>
-          <textarea id="trpStudents" name="trpStudents" class="form-control col-md-6"></textarea>
-        </div> <!-- input-group -->
-      </div>
-    </div> <!-- form-gorup -->
-    
-    <div class="pull-center">
-      <button class="btn btn-default" id="newReqCancelBtn">Cancel</button>
-      <input class="btn btn-primary" type="submit" id="newReqSubBtn" value="Submit Trip Request">
-    </div>
+  <div id="trpSubConf" style="display:none"></div>
   
-  </form>
 </div>
 
 
@@ -161,8 +155,6 @@
   $(function(){
     
     var FORMOBJ = {};    
-    var DIALOG_DIMENSIONS = {width: 600, height: 425};
-    var pickerApiLoaded = false;
     
     $('#trpTrans').on("change", displayOther);
     $('#trpStudents').popover();
@@ -182,9 +174,8 @@
       FORMOBJ.destination = $('#trpDest').val();
       FORMOBJ.number_of_students = $('#trpNumStud').val();
       FORMOBJ.students = $('#trpStudents').val();
-      console.log(FORMOBJ);
 
-      google.script.run.withSuccessHandler().submitNewTripRequest(FORMOBJ);
+      google.script.run.withSuccessHandler(displayTripSubConf).submitNewTripRequest(FORMOBJ);
     }
      
     function displayOther(){
@@ -199,6 +190,13 @@
     
     function cancelTrpReq(){
       $('#homeBtn').trigger("click");
+    }
+    
+    function displayTripSubConf(resultHtml){
+      var $output = $('#trpSubConf');
+      $output.html(resultHtml);
+      $('#trpFormSub').hide();
+      $('#trpSubConf').show();
     }
     
   });

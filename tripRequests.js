@@ -44,6 +44,11 @@ function submitNewTripRequest(formObj){
   
   NVGAS.insertSqlRecord(dbString, [tripQuery, trackQuery]);
   PropertiesService.getScriptProperties().setProperty('nextTrpId', (Number(nextId) + 1).toString());
+  
+  html = HtmlService.createTemplateFromFile('confirm_trip_submission');
+  html.trip = trip;
+  
+  return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
   debugger;
 }
 

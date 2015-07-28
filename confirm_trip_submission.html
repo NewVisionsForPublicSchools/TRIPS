@@ -1,0 +1,29 @@
+<div class="text-center">
+
+  <h3 class="text-primary">Trip Request Submitted</h3>
+  <p>Your trip request has been successfully submitted! You should recieve an email confirmation shortly.</p>
+  
+  <div class="pull-center row">
+    <button class="btn btn-danger" type="button" id="homeBtn2">Home</button>
+    <button class="btn btn-primary" id="reqBtn2">Submit Another Request</button> 
+  </div>
+  
+</div>
+
+
+
+<script>
+
+  $(function(){
+  
+    $('#reqBtn2').click(function(){
+      $('#subTrpBtn').trigger("click");
+    });
+    
+    $('#homeBtn2').click(function(){
+      $('#homeBtn').trigger("click");
+    });
+    
+  });
+
+</script>
