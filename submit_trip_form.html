@@ -160,90 +160,31 @@
 <script>
   $(function(){
     
-    var FORMOBJ = {};
-    var DEVELOPER_KEY = 'AIzaSyCZbnbE1NGsNzRzLRfe7AT2PkqZw_g0OQU';
-    
-//    google.script.run.withSuccessHandler(getKey).getDevKey();
-//    console.log(DEVELOPER_KEY);
+    var FORMOBJ = {};    
     var DIALOG_DIMENSIONS = {width: 600, height: 425};
     var pickerApiLoaded = false;
     
     $('#trpTrans').on("change", displayOther);
     $('#trpStudents').popover();
     $('#newReqCancelBtn').click(cancelTrpReq);
-//    $('#trpStudents').click(getOAuthToken);
     $('#trpForm').submit(processForm);
-    
-    gapi.load('picker', {'callback': function() {
-      pickerApiLoaded = true;
-    }});
 
-    
-//    function getKey(key){
-//      var DEVELOPER_KEY = key;
-//    }
-    
     function processForm(){
-//      FORMOBJ.requestor = $('#requestor').val();
-//      FORMOBJ.trip_name = $('#trpName').val();
-//      FORMOBJ.description = $('#trpDesc').val();
-//      FORMOBJ.trip_date = $('#trpDate').val();
-//      FORMOBJ.cost_per_student = $('#trpCostStud').val();
-//      FORMOBJ.collector = $('#collector').val();
-//      FORMOBJ.total_cost = $('#trpCostTot').val();
-//      FORMOBJ.transportation = $('#trpTrans').val();
-//      FORMOBJ.other_transportation = $('#trpOthrTrans').val();
-//      FORMOBJ.destination = $('#trpDest').val();
-//      FORMOBJ.number_of_students = $('#trpNumStud').val();
-//      FORMOBJ.students = $('#trpStudents').val();
-//      console.log(FORMOBJ);
+      FORMOBJ.requestor = $('#requestor').val();
+      FORMOBJ.trip_name = $('#trpName').val();
+      FORMOBJ.description = $('#trpDesc').val();
+      FORMOBJ.trip_date = $('#trpDate').val();
+      FORMOBJ.cost_per_student = $('#trpCostStud').val();
+      FORMOBJ.collector = $('#collector').val();
+      FORMOBJ.total_cost = $('#trpCostTot').val();
+      FORMOBJ.transportation = $('#trpTrans').val();
+      FORMOBJ.other_transportation = $('#trpOthrTrans').val();
+      FORMOBJ.destination = $('#trpDest').val();
+      FORMOBJ.number_of_students = $('#trpNumStud').val();
+      FORMOBJ.students = $('#trpStudents').val();
+      console.log(FORMOBJ);
 
-      var $formObj = $('#trpForm').serialize();
-      console.log($formObj);
-      google.script.run.withSuccessHandler().submitNewTripRequest($formObj);
-    }
-    
-    function getOAuthToken() {
-      google.script.run.withSuccessHandler(createPicker)
-          .withFailureHandler(showError).getOAuthToken();
-    }
-    
-    function createPicker(token) {
-      if (pickerApiLoaded && token) {
-        var picker = new google.picker.PickerBuilder()
-            .addView(google.picker.ViewId.DOCS)
-            .hideTitleBar()
-            .setOAuthToken(token)
-            .setDeveloperKey(DEVELOPER_KEY)
-            .setCallback(pickerCallback)
-            .setOrigin('https://script.google.com')
-            .setSize(DIALOG_DIMENSIONS.width - 2,
-                DIALOG_DIMENSIONS.height - 2)
-            .build();
-        picker.setVisible(true);
-      } else {
-        showError('Unable to load the file picker.');
-      }
-    }
-    
-    function pickerCallback(data) {
-      var action = data[google.picker.Response.ACTION];
-      if (action == google.picker.Action.PICKED) {
-        var doc = data[google.picker.Response.DOCUMENTS][0];
-        var id = doc[google.picker.Document.ID];
-        var url = doc[google.picker.Document.URL];
-        var title = doc[google.picker.Document.NAME];
-        FORMOBJ.fileId = id;
-        document.getElementById('result').innerHTML =
-            '<b>You chose:</b><br>Name: <a href="' + url + '">' + title +
-            '</a><br>ID: ' + id;
-      } else if (action == google.picker.Action.CANCEL) {
-        document.getElementById('result').innerHTML = 'Picker canceled.';
-      }
-    }
-    
-    function showError(message) {
-      document.getElementById('result').innerHTML = 'Error: ' + message;
+      google.script.run.withSuccessHandler().submitNewTripRequest(FORMOBJ);
     }
      
     function displayOther(){
@@ -258,19 +199,6 @@
     
     function cancelTrpReq(){
       $('#homeBtn').trigger("click");
-    }
-    
-    function subNewTripReq(){
-      var $formObj = $('form')[0];
-      var $input = $('#trpStudents');
-      var $file = $input[0].files[0];
-      console.log($file);
-      var reader = new FileReader();
-      console.log($formObj.trpStudents);
-      console.log($formObj);
-      console.log($formObj.trpStudents);
-        debugger;
-       google.script.run.withSuccessHandler().submitNewTripRequest($formObj);
     }
     
   });

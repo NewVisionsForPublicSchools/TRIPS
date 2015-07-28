@@ -14,38 +14,36 @@ function getTripActionItems(){
 function submitNewTripRequest(formObj){
   var test, nextId, trip, studentsUrl, ripQuery, trackQuery;
   
-  PropertiesService.getScriptProperties().setProperty('TEST', formObj)
-  nextId = PropertiesService.getScriptProperties().getProperty('nextTrpId')
+  nextId = PropertiesService.getScriptProperties().getProperty('nextTrpId');
   trip = formObj;
   trip.timestamp = new Date();
   trip.username = Session.getActiveUser().getEmail();
   trip.id = "AMS4TRP" + nextId.toString();
-//  studentsUrl = processStudentFile(trip).link || "www.example.com";
-//  
-//  tripQuery = 'INSERT INTO trip_requests(' + tripColumns + ') values("'
-//              + trip.trip_id + '", "'
-//              + trip.timestamp + '", "'
-//              + trip.username + '", "'
-//              + trip.requested_by + '", "'
-//              + trip.trip_name + '", "'
-//              + trip.description + '", "'
-//              + trip.trip_date + '", "'
-//              + trip.cost_per_student + '", "'
-//              + trip.collector + '", "'
-//              + trip.total_cost + '", "'
-//              + trip.transportation + '", "'
-//              + trip.other_transport + '", "'
-//              + trip.destination + '", "'
-//              + trip.number_of_students + '", "'
-//              + studentsUrl + '")';
-//  
-//  trackQuery = 'INSERT INTO tracking(' + trackColumns + ') values("'
-//               + trip.trip_id + '", "'
-//               + "Active" + '", "'
-//               + "AP" + '")';
-//  
-//  NVGAS.insertSqlRecord(dbString, [tripQuery, trackQuery]);
-//  PropertiesService.getScriptProperties().setProperty('nextTrpId', (Number(nextId) + 1).toString());
+  
+  tripQuery = 'INSERT INTO trip_requests(' + tripColumns + ') values("'
+              + trip.id + '", "'
+              + trip.timestamp + '", "'
+              + trip.username + '", "'
+              + trip.requestor + '", "'
+              + trip.trip_name + '", "'
+              + trip.description + '", "'
+              + trip.trip_date + '", "'
+              + trip.cost_per_student+ '", "'
+              + trip.collector + '", "'
+              + trip.total_cost + '", "'
+              + trip.transportation + '", "'
+              + trip.other_transportation + '", "'
+              + trip.destination + '", "'
+              + trip.number_of_students + '", "'
+              + trip.students + '")';
+  
+  trackQuery = 'INSERT INTO tracking(' + trackColumns + ') values("'
+               + trip.id + '", "'
+               + "Active" + '", "'
+               + "AP" + '")';
+  
+  NVGAS.insertSqlRecord(dbString, [tripQuery, trackQuery]);
+  PropertiesService.getScriptProperties().setProperty('nextTrpId', (Number(nextId) + 1).toString());
   debugger;
 }
 
