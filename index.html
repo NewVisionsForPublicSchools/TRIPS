@@ -29,7 +29,7 @@
           </div>
           <div class="row vertical-center">
             <a class="btn btn-lg btn-primary" type="button" id="subTrpBtn">Submit Trip Request</a>
-            <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" >
+            <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" disabled="disabled">
               Process Trip Requests
             </button>
           </div>
@@ -51,14 +51,14 @@
 <script>
 $(function(){
 
-//  $(document).ready(loadIndexActions);
+  $(document).ready(loadIndexActions);
   $('#subTrpBtn').click(loadTrpForm);
   $('#procReqBtn').click(loadProcPage);
   
-//  function loadIndexActions(){
+  function loadIndexActions(){
 //    google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
-//    google.script.run.withSuccessHandler(verifyUser).validateUser();
-//  }
+    google.script.run.withSuccessHandler(verifyUser).validateUser();
+  }
   
   function loadTrpForm(resultHtml){
     $('.page').hide();
@@ -73,12 +73,12 @@ $(function(){
     $('#processTrpPage').show();
   }
   
-//  function verifyUser(answer){
-//    if(answer == true){
-//      $('.btn-validated').prop('disabled', false);
-//    }
-//  }
-//  
+  function verifyUser(answer){
+    if(answer == true){
+      $('.btn-validated').prop('disabled', false);
+    }
+  }
+  
   function updateActionItems(resultHtml){
     var $output = $('#actionItems');
     $output.html(resultHtml);
