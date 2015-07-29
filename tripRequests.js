@@ -33,7 +33,7 @@ function submitNewTripRequest(formObj){
   
   trackQuery = 'INSERT INTO tracking(' + trackColumns + ') values("'
                + trip.id + '", "'
-               + "Active" + '", "'
+               + "New" + '", "'
                + "AP" + '")';
   
   NVGAS.insertSqlRecord(dbString, [tripQuery, trackQuery]);

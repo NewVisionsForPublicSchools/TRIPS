@@ -56,7 +56,7 @@ $(function(){
   $('#procReqBtn').click(loadProcPage);
   
   function loadIndexActions(){
-//    google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
+    google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
     google.script.run.withSuccessHandler(verifyUser).validateUser();
   }
   
