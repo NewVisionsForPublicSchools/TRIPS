@@ -1,13 +1,7 @@
 var dbString = PropertiesService.getScriptProperties().getProperty('DBSTRING');
 var tripColumns = 'trip_id,requested_date,username,requested_by,trip_name,description,trip_date,cost_per_student,'
                 + 'collector,total_cost,transportation,other_transport,destination,number_of_students,students';
-var trackColumns = 'trip_id,status,queue'
-
-
-
-function getTripActionItems(){
-  
-}
+var trackColumns = 'trip_id,status,queue';
 
 
 

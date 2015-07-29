@@ -29,8 +29,8 @@
           </div>
           <div class="row vertical-center">
             <a class="btn btn-lg btn-primary" type="button" id="subTrpBtn">Submit Trip Request</a>
-            <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" disabled="disabled">
-              Process Supply Requests <!-- <span class="badge">4</span> -->
+            <button class="btn btn-lg btn-primary btn-validated" type="button" id="procReqBtn" >
+              Process Trip Requests
             </button>
           </div>
         </div>
@@ -38,6 +38,9 @@
       
       <!-- Submit Request Form -->
       <div class="page" id="subTrpFormPage" style="display:none"><?!= include('submit_trip_form'); ?></div>
+      
+      <!-- Process Trip Requests -->
+      <div class="page" id="processTrpPage" style="display:none"><?!= include('process_trip_page'); ?></div>
       
   </div>
 
@@ -50,7 +53,7 @@ $(function(){
 
 //  $(document).ready(loadIndexActions);
   $('#subTrpBtn').click(loadTrpForm);
-//  $('#procReqBtn').click(loadProcPage);
+  $('#procReqBtn').click(loadProcPage);
   
 //  function loadIndexActions(){
 //    google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
@@ -65,10 +68,10 @@ $(function(){
     $('#trpForm').trigger("reset");
   }
   
-//  function loadProcPage(){
-//    $('.page').hide();
-//    $('#procPage').show();
-//  }
+  function loadProcPage(){
+    $('.page').hide();
+    $('#processTrpPage').show();
+  }
   
 //  function verifyUser(answer){
 //    if(answer == true){
@@ -76,10 +79,10 @@ $(function(){
 //    }
 //  }
 //  
-//  function updateActionItems(resultHtml){
-//    var $output = $('#actionItems');
-//    $output.html(resultHtml);
-//  }    
+  function updateActionItems(resultHtml){
+    var $output = $('#actionItems');
+    $output.html(resultHtml);
+  }    
 
 });
 
