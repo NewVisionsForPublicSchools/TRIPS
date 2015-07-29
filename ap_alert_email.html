@@ -1,0 +1,22 @@
+<div>
+  <h1>Trip Request Submission</h1>
+  <p>A trip request has been submitted and requires further processing.</p>
+  <ul>
+    <li>Trip Date:  <b><?= request.trip_date ?></b></li>
+    <li>Requested Date:  <b><?= request.timestamp ?></b></li>
+    <li>Requested By:  <b><?= request.requestor ?></b></li>
+    <li>Email:  <b><?= request.username ?></b></li>
+    <li>Destination:  <b><?= request.destination ?></b></li>
+    <li>Cost Per Student:  <b><?= request.cost_per_student ?></b></li>
+    <li>Total Cost:  <b><?= request.total_cost ?></b></li>
+    <li>Collector:  <b><?= request.collector ?></b></li>
+    <li>Description:  <b><?= request.description ?></b></li>
+    <li>Transportation:  <b><?= request.transportation ?></b></li>
+    <li>Number of Students:  <b><?= request.number_of_students ?></b></li>
+    <li>Students:  <b><?= request.students ?></b></li>
+  </ul>
+  <p><b>ACTION REQUIRED: Please log into the <a href="<?= url ?>">
+        Trip Request Portal</a> and navigate to the <em>Process Trip Request</em> page to process this request.</b></p>
+  <p>Thank you.</p>
+
+</div>

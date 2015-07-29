@@ -12,7 +12,7 @@ function getTripActionItems(){
 
 
 function submitNewTripRequest(formObj){
-  var test, nextId, trip, studentsUrl, ripQuery, trackQuery;
+  var test, nextId, trip, studentsUrl, ripQuery, trackQuery, html;
   
   nextId = PropertiesService.getScriptProperties().getProperty('nextTrpId');
   trip = formObj;
@@ -44,6 +44,8 @@ function submitNewTripRequest(formObj){
   
   NVGAS.insertSqlRecord(dbString, [tripQuery, trackQuery]);
   PropertiesService.getScriptProperties().setProperty('nextTrpId', (Number(nextId) + 1).toString());
+  Utilities.sleep(500);
+  sendApAlert(trip);
   
   html = HtmlService.createTemplateFromFile('confirm_trip_submission');
   html.trip = trip;
@@ -68,4 +70,27 @@ function processStudentFile(tripObj){
   students.link = folder.getUrl();
   students.id = folder.getId(); 
   return students;
+}
+
+
+
+function sendApAlert(request){
+  var test, recQuery, recipientList, subject, html, template, alertQuery, statusQuery;
+  
+  recQuery = 'SELECT username FROM TRIPS.users WHERE roles LIKE "%AP%"';
+  recipientList = NVGAS.getSqlRecords(dbString, recQuery).map(function(e){
+    return e.username;
+  }).join();
+  subject = request.trip_name + " | Trip Request Submitted | " + request.id
+  html = HtmlService.createTemplateFromFile('ap_alert_email');
+  html.request = request;
+  html.request.timestamp = NVGAS.formatDateDash(request.timestamp);
+  html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
+  template = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+
+  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template});
+  
+  alertQuery = 'UPDATE TRIPS.tracking SET ap_alert = "' + new Date() + '" WHERE trip_id = "' + request.id + '"';
+  NVGAS.updateSqlRecord(dbString, [alertQuery]);
+ 
 }
