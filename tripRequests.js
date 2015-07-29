@@ -88,3 +88,15 @@ function sendApAlert(request){
   NVGAS.updateSqlRecord(dbString, [alertQuery]);
  
 }
+
+
+
+function getTrip(trip_id){
+  var test, query, trip;
+  
+  query = 'SELECT * FROM trip_requests r INNER JOIN tracking t ON r.trip_id = t.trip_id WHERE r.trip_id = "'
+          + trip_id + '"';
+  trip = NVGAS.getSqlRecords(dbString, query)[0];
+  
+  return trip;
+}

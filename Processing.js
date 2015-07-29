@@ -47,3 +47,29 @@ function getTripsByRole(){
   CacheService.getUserCache().put('roleRequests', requests);
   return requests;
 }
+
+
+
+function loadNewTrips(){
+  var test, queue, data, html;
+  
+  queue = JSON.parse(CacheService.getUserCache().get('roleRequests')) || getTripsByRole();
+  data = queue.filter(function(e){
+    return (e.status == 'New') || (e.status =='Under Review');
+  });
+  
+  html = HtmlService.createTemplateFromFile('new_trips_table');
+  html.data = data;
+  return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+}
+
+
+
+function loadNewReqForm(trip_id){
+  var test, html;
+  
+  html = HtmlService.createTemplateFromFile('process_new_trip_form');
+  html.request = getTrip(trip_id);
+  html.approver = Session.getActiveUser().getEmail();
+  return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+}

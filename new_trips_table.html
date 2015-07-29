@@ -1,0 +1,58 @@
+<div>
+  <h3 class="pull-left text-nvGray">Trips To Be Processed</h3>
+  <table id="newReqTbl" class="table table-striped">
+    <tr>
+      <th class="bg-primary text-center">Trip</th>      
+      <th class="bg-primary text-center">Requested By</th>
+      <th class="bg-primary text-center">Trip Name</th>
+      <th class="bg-primary text-center">Description</th>
+      <th class="bg-primary text-center">Trip Date</th>
+      <th class="bg-primary text-center">Cost Per Student</th>
+      <th class="bg-primary text-center">Total Cost</th>
+      <th class="bg-primary text-center">Transportation</th>
+      <th class="bg-primary text-center">Destination</th>
+      <th class="bg-primary text-center">Number of Students</th>
+    </tr> <!-- close header row -->
+    
+    <? for(var i=0;i<data.length;i++){ ?>
+      <tr>
+        <td><button class="btn btn-xs btn-primary newTrpLink" value=<?= data[i].trip_id ?>>
+          <?= data[i].trip_id ?>
+        </button></td>
+        <td><?= data[i].requested_by ?></td>
+        <td><?= data[i].trip_name?></td>
+        <td><?= data[i].description ?></td>
+        <td><?= data[i].trip_date ?></td>
+        <td><?= data[i].cost_per_student ?></td>
+        <td><?= data[i].total_cost ?></td>
+        <td><?= data[i].transportation ?></td>
+        <td><?= data[i].destination ?></td>
+        <td><?= data[i].number_of_students ?></td>
+      </tr>
+    <? } ?>
+  </table>
+</div>
+
+
+
+<script>
+  $(function(){
+    
+    $('.newTrpLink').click(goToLink);
+    
+    function goToLink(){
+      var $trip = $(this).attr("value");
+      google.script.run.withSuccessHandler(displayNewTrpForm).loadNewReqForm($trip);
+    }
+    
+    function displayNewTrpForm(resultHtml){
+      var $output = $('#newTrpForm');
+      $output.html(resultHtml);
+      $('.reqData').hide();
+      $('.reqForm').hide();
+      $('#actionItems').hide();
+      $('#newTrpForm').show();
+    }
+   
+  });
+</script>
