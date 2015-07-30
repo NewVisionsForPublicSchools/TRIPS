@@ -1,3 +1,153 @@
-<div>
-  Process New Trip Form
+<div class="text-center">
+  <h2 class="text-nvGray">Process Trip Request</h2>
+  <br/>
+  <div class=""> 
+    <form class="form-horizontal" method="get" onsubmit="return false" id="procNewTrpForm">
+      
+      <div class="row well col-md-4 col-md-offset-4">
+        <h4 class=""><b>Request: </b><?= request.trip_id ?></h4>
+        <h4 class=""><b>Requestor: </b><?= request.requested_by ?></h4>
+        <h4 class=""><b>Trip Name: </b><?= request.trip_name?></h4>
+        <h4 class=""><b>Trip Date: </b><?= request.trip_date ?></h4>
+        <h4 class=""><b>Cost Per Student: </b><?= request.cost_per_student ?></h4>
+        <h4 class=""><b>Total Cost: </b><?= request.total_cost ?></h4>
+        <? if(request.transportation == "Other"){ ?>
+          <h4 class=""><b>Transportation: </b><?= request.other_transport ?></h4>
+        <? } ?>
+        <? else{ ?>
+          <h4 class=""><b>Transportation: </b><?= request.transportation ?></h4>
+        <? } ?>
+        <h4 class=""><b>Destination: </b><?= request.destination ?></h4>
+        <h4 class=""><b>Number of Students: </b><?= request.number_of_students ?></h4>
+      </div>
+      <br/>
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="newTrpStatus"></label>
+        <div class="col-md-3">
+          <div class="input-group">
+            <span class="input-group-addon">Status</span>
+            <select class="form-control col-md-6" name="newTrpStatus" id="newTrpStatus" required="true" placeholder="Status">
+              <option>Approved</option>
+              <option>Denied</option>
+            </select>
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group" id="newTrpJustGrp" style="display:none">
+        <label class="control-label col-md-3" for="newTrpJust"></label>
+        <div class="col-md-8">
+          <div class="input-group">
+            <span class="input-group-addon">Justification</span>
+            <textarea class="form-control col-md-8" rows="4" name="newTrpJust" id="newTrpJust" placeholder="Resolution">
+            </textarea>
+          </div> <!-- input-group -->
+        </div>
+      </div> <!-- form-gorup -->
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="tripId"></label>
+        <input type="text" class="form-control col-md-6" name="tripId" id="tripId" style="display:none"
+               value=<?= request.trip_id ?>>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="newTrpApprover"></label>
+        <input type="text" class="form-control col-md-6" name="newTrpApprover" id="newTrpApprover" style="display:none"
+               value=<?= approver ?>>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-3" for="trpQueue"></label>
+        <input type="text" class="form-control col-md-6" name="trpQueue" id="trpQueue" style="display:none"
+               value=<?= request.queue ?>>
+      </div>
+      
+      <div class="pull-center">
+        <button class="btn btn-default" id="newTrpCancelBtn">Cancel</button>
+        <button class="btn btn-primary" type="submit" id="newReqSubBtn">Submit</button> 
+      </div>
+      <!-- </div> <!-- div -->
+      
+    </form>
+  </div>
 </div>
+
+
+
+<script>
+  $(function(){
+
+    $('#newTrpStatus').on("change", displayResolution);
+//    $('#newReqCost').on("change", updateStatusOptions)
+    $('#newTrpCancelBtn').click(cancelProcNewReq);
+    $('#procNewTrpForm').submit(submitProcNewReq);
+//    $('#procNewTrpForm').load(updateStatusOptions);
+    
+    function cancelProcNewReq(){
+      $('.reqData').hide();
+      $('.reqForm').hide();
+      $('#actionItems').show();
+      $('#procNewTrpForm').hide();
+      $('#nrBtn').click();
+    }
+    
+//    function updateStatusOptions(){
+//      var $cost = $('#newReqCost').val();
+//      if($('#trpQueue').val() == "BM"){
+//        if($cost > 1000){
+//          $('.newReqOpt').hide();
+//          $('#newReqOpt2').show();       
+//        }
+//        else{
+//          $('.newReqOpt').hide();
+//          $('#newReqOpt1').show();
+//        }
+//      }
+//      else{
+//        if(($('#trpQueue').val() == "P") && ($cost >= 10000)){
+//          $('.newReqOpt').hide();
+//          $('#newReqOpt4').show();
+//        }
+//        else{
+//          $('.newReqOpt').hide();
+//          $('#newReqOpt3').show();
+//          }
+//      }
+//    }
+    
+    function displayResolution(){
+      var $status = $('#newTrpStatus').val();
+      if($status == 'Denied'){
+        $('#newTrpJust').prop("required", true);
+        $('#newTrpJust').attr("required", "true");
+        $('#newTrpJustGrp').show();
+      }
+      else{
+        $('#newTrpJust').prop("required", false);
+        $('#newTrpJustGrp').hide();
+      }
+    }
+    
+    function submitProcNewReq(){
+      var $formObj = {
+        status: $('#newTrpStatus').val(),
+        justification: $('#newTrpJust').val(),
+        trip_id: $('#tripId').val(),
+        approver: $('#newTrpApprover').val()
+      }
+    
+      google.script.run.withSuccessHandler(displayProcNewTrpConf).processNewTrpApproval($formObj);
+    }
+    
+    function displayProcNewTrpConf(resultHtml){
+      var $output = $('#processNewTrpConfirmation');
+      $output.html(resultHtml);
+      $('.reqData').hide();
+      $('.reqForm').hide();
+      $output.show();
+    }
+    
+  });
+</script>
