@@ -71,6 +71,7 @@ function loadNewReqForm(trip_id){
   html = HtmlService.createTemplateFromFile('process_new_trip_form');
   html.request = getTrip(trip_id);
   html.approver = Session.getActiveUser().getEmail();
+  debugger;
   return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 }
 
@@ -87,7 +88,7 @@ function processNewTrpApproval(formObj){
   
   switch(formObj.status){
     case 'Approved':
-      aQuery = 'UPDATE tracking SET ap_approval = "' + new Date() + '" WHERE trip_id = "' + formObj.trip_id + '"';
+      aQuery = 'UPDATE tracking SET ap_approval = "' + new Date() + '", queue = "DSO" WHERE trip_id = "' + formObj.trip_id + '"';
       queryArray.push(aQuery);
       break;
       
