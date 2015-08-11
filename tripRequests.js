@@ -10,15 +10,16 @@ function submitNewTripRequest(formObj){
   
   nextId = PropertiesService.getScriptProperties().getProperty('nextTrpId');
   trip = formObj;
-  trip.timestamp = new Date();
+  trip.requested_date = new Date();
   trip.username = Session.getActiveUser().getEmail();
   trip.id = "AMS4TRP" + nextId.toString();
+  trip.trip_date = new Date(trip.trip_date.split("-")[0],trip.trip_date.split("-")[1]-1,trip.trip_date.split("-")[2]);
   
   tripQuery = 'INSERT INTO trip_requests(' + tripColumns + ') values("'
               + trip.id + '", "'
-              + trip.timestamp + '", "'
+              + trip.requested_date + '", "'
               + trip.username + '", "'
-              + trip.requestor + '", "'
+              + trip.requested_by + '", "'
               + trip.trip_name + '", "'
               + trip.description + '", "'
               + trip.trip_date + '", "'
@@ -76,9 +77,10 @@ function sendApAlert(request){
     return e.username;
   }).join();
   subject = request.trip_name + " | Trip Request Submitted | " + request.id
-  html = HtmlService.createTemplateFromFile('ap_alert_email');
+  html = HtmlService.createTemplateFromFile('approver_alert_email');
   html.request = request;
-  html.request.timestamp = NVGAS.formatDateDash(request.timestamp);
+  html.request.trip_date = new Date(request.trip_date).toLocaleDateString();
+  html.request.requested_date = request.requested_date.toLocaleDateString();
   html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
   template = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 

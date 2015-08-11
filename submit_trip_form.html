@@ -164,7 +164,7 @@
     $('#trpDate').on("change", validateTripDate);
 
     function processForm(){
-      FORMOBJ.requestor = $('#requestor').val();
+      FORMOBJ.requested_by = $('#requestor').val();
       FORMOBJ.trip_name = $('#trpName').val();
       FORMOBJ.description = $('#trpDesc').val();
       FORMOBJ.trip_date = $('#trpDate').val();

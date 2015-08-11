@@ -78,8 +78,11 @@ function loadNewReqForm(trip_id){
 
 
 function processNewTrpApproval(formObj){
-  var test, queryArray, rQuery, aQuery, html, approverAlert, newQueue;
+  var test, trip, approvalCol, queryArray, rQuery, aQuery, html, approverAlert, newQueue;
   
+  trip = getTrip(formObj.trip_id);
+  approvalCol = trip.queue == "AP" ? "ap_approval" : "dso_approval";
+  newQueue = trip.queue == "AP" ? "DSO" : "BM";
   queryArray = [];
   rQuery = 'UPDATE tracking t SET t.status = "' + formObj.status
            + '", t.justification = "' + formObj.justification + '", t.approver = "' + formObj.approver
@@ -88,7 +91,7 @@ function processNewTrpApproval(formObj){
   
   switch(formObj.status){
     case 'Approved':
-      aQuery = 'UPDATE tracking SET ap_approval = "' + new Date() + '", queue = "DSO" WHERE trip_id = "' + formObj.trip_id + '"';
+      aQuery = 'UPDATE tracking SET ' + approvalCol + ' = "' + new Date() + '", queue = "' + newQueue + '" WHERE trip_id = "' + formObj.trip_id + '"';
       queryArray.push(aQuery);
       break;
       
@@ -112,41 +115,67 @@ function processNewTrpApproval(formObj){
 
 
 function checkApprovalStatus(approvalObj){
-//  var test, status, trip;
-//  
-//  status = approvalObj.status;
-//  trip = approvalObj.trip_id;
-//  
-//  switch (status){
-//    case 'Approved':
-//      sendApprovalEmail(request);
-//      break;
-//      
-//    case 'Denied':
+  var test, status, trip, tripId, action;
+  
+  trip = getTrip(approvalObj.trip_id);
+  status = trip.status;
+  tripId = trip.trip_id;
+  
+  switch (status){
+    case 'Approved':
+      action = trip.queue == "DSO" ? forwardToDso(trip) : sendApprovalEmail(trip);
+      break;
+      
+    case 'Denied':
 //      sendDenialEmail(request);
-//      break;
-//      
-//    default:
-//      break;
-//  } 
+      break;
+      
+    default:
+      break;
+  } 
 }
 
 
 
-function sendApprovalEmail(trip_id){
-  var test, trip, recipient, subject, html, template, ccQuery, copyList;
+function sendApprovalEmail(tripObj){
+//  var test, trip, recipient, subject, html, template, ccQuery, copyList;
+//  
+//  trip = getTrip(tripObj.trip_id);
+//  recipient = trip.username;
+//  subject = "DO NOT REPLY: Trip Request Approved | " + trip.request_id;
+//  html = HtmlService.createTemplateFromFile('approval_email');
+//  html.request = trip;
+//  template = html.evaluate().getContent();
+//  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%BM%"';
+//  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+//    return e.username;
+//  }).join();
+//  
+//  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
+//                                            cc: copyList});
+}
+
+
+
+function forwardToDso(tripObj){
+  var test, request, recQuery, recipientList, subject, html, template, alertQuery, statusQuery;
   
-  trip = getTrip(trip_id);
-  recipient = trip.username;
-  subject = "DO NOT REPLY: Supply Request Approved | " + request.request_id;
-  html = HtmlService.createTemplateFromFile('approval_email');
-  html.request = request;
-  template = html.evaluate().getContent();
-  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%BM%"';
-  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+  request = tripObj;
+  recQuery = 'SELECT username FROM TRIPS.users WHERE roles LIKE "%DSO%"';
+  recipientList = NVGAS.getSqlRecords(dbString, recQuery).map(function(e){
     return e.username;
   }).join();
+  subject = request.trip_name + " | Trip Request Approval Needed | " + request.trip_id
+  html = HtmlService.createTemplateFromFile('approver_alert_email');
+  html.request = request;
+  html.request.trip_date = new Date(request.trip_date).toLocaleDateString();
+  html.request.requested_date = new Date(request.requested_date).toLocaleDateString();
+  html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
+  template = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+
+  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template});
   
-  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
-                                            cc: copyList});
+  alertQuery = 'UPDATE TRIPS.tracking SET dso_alert = "' + new Date() + '" WHERE trip_id = "' + request.trip_id + '"';
+  NVGAS.updateSqlRecord(dbString, [alertQuery]);
+  debugger;
 }
