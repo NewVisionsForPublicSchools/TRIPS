@@ -97,7 +97,7 @@ function processNewTrpApproval(formObj){
       break;
       
     case 'Denied':
-      aQuery = 'UPDATE tracking SET denial = "' + new Date() + '", queue = "" WHERE trip_id = "' + formObj.trip_id + '"';
+      aQuery = 'UPDATE tracking SET denial = "' + new Date() + '", queue = "", status = "Denied" WHERE trip_id = "' + formObj.trip_id + '"';
       queryArray.push(aQuery);
       break;
       
@@ -128,7 +128,7 @@ function checkApprovalStatus(approvalObj){
       break;
       
     case 'Denied':
-//      sendDenialEmail(request);
+      sendDenialEmail(trip);
       break;
       
     default:
@@ -179,4 +179,24 @@ function forwardToDso(tripObj){
   alertQuery = 'UPDATE TRIPS.tracking SET dso_alert = "' + new Date() + '" WHERE trip_id = "' + request.trip_id + '"';
   NVGAS.updateSqlRecord(dbString, [alertQuery]);
   debugger;
+}
+
+
+
+function sendDenialEmail(trip){
+  var test, request, recipient, subject, html, template, ccQuery, copyList;
+  
+  request = getTrip(trip.trip_id);
+  recipient = request.username;
+  subject = "DO NOT REPLY: Trip Request Denied | " + request.trip_id;
+  html = HtmlService.createTemplateFromFile('denial_email');
+  html.request = request;
+  template = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%AP%"';
+  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+    return e.username;
+  }).join();
+  
+  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
+                                            cc: copyList});
 }
