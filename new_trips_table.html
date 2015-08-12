@@ -23,7 +23,7 @@
         <td><?= data[i].requested_by ?></td>
         <td><?= data[i].trip_name?></td>
         <td><?= data[i].description ?></td>
-        <td><?= data[i].trip_date ?></td>
+        <td><?= new Date(data[i].trip_date).toLocaleDateString() ?></td>
         <td><?= data[i].cost_per_student ?></td>
         <td><?= data[i].total_cost ?></td>
         <td><?= data[i].collector ?></td>

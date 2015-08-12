@@ -29,7 +29,7 @@ function getTripActionItems(){
 function getTripsByRole(){
   var test, user, userQuery, roles, keys, requests;
   
-//  user = 'approver1@newvisions.org';
+//  user = 'approver2@charter.newvisions.org';
   user = Session.getActiveUser().getEmail();
   userQuery = 'SELECT roles FROM users WHERE username = "' + user + '"'; 
   roles = NVGAS.getSqlRecords(dbString, userQuery).map(function(e){
@@ -78,20 +78,21 @@ function loadNewReqForm(trip_id){
 
 
 function processNewTrpApproval(formObj){
-  var test, trip, approvalCol, queryArray, rQuery, aQuery, html, approverAlert, newQueue;
+  var test, trip, approvalCol, queryArray, rQuery, aQuery, html, approverAlert, newQueue, status;
   
   trip = getTrip(formObj.trip_id);
   approvalCol = trip.queue == "AP" ? "ap_approval" : "dso_approval";
   newQueue = trip.queue == "AP" ? "DSO" : "BM";
   queryArray = [];
-  rQuery = 'UPDATE tracking t SET t.status = "' + formObj.status
-           + '", t.justification = "' + formObj.justification + '", t.approver = "' + formObj.approver
+  rQuery = 'UPDATE tracking t SET t.justification = "' + formObj.justification + '", t.approver = "' + formObj.approver
            + '" WHERE t.trip_id = "' + formObj.trip_id + '"';
   queryArray.push(rQuery);
   
   switch(formObj.status){
     case 'Approved':
-      aQuery = 'UPDATE tracking SET ' + approvalCol + ' = "' + new Date() + '", queue = "' + newQueue + '" WHERE trip_id = "' + formObj.trip_id + '"';
+      status = newQueue == "DSO" ? "Under Review" : "Approved";
+      aQuery = 'UPDATE tracking SET ' + approvalCol + ' = "' + new Date() + '", queue = "' + newQueue + '", status = "'
+               + status + '" WHERE trip_id = "' + formObj.trip_id + '"';
       queryArray.push(aQuery);
       break;
       

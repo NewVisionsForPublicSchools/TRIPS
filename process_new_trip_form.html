@@ -8,9 +8,9 @@
         <h4 class=""><b>Request: </b><?= request.trip_id ?></h4>
         <h4 class=""><b>Requested By: </b><?= request.requested_by ?></h4>
         <h4 class=""><b>Trip Name: </b><?= request.trip_name?></h4>
-        <h4 class=""><b>Trip Date: </b><?= request.trip_date ?></h4>
-        <h4 class=""><b>Cost Per Student: </b><?= request.cost_per_student ?></h4>
-        <h4 class=""><b>Total Cost: </b><?= request.total_cost ?></h4>
+        <h4 class=""><b>Trip Date: </b><?= new Date(request.trip_date).toLocaleDateString() ?></h4>
+        <h4 class=""><b>Cost Per Student: </b>$<?= request.cost_per_student ?></h4>
+        <h4 class=""><b>Total Cost: </b>$<?= request.total_cost ?></h4>
         <h4 class="" id="trpFrmTrans"><b>Transportation:  </b><?= request.transportation ?></h4>
         <h4 class="" id="trpFrmOthr" style="display:none"><b>Transportation:  </b><?= request.other_transport ?></h4>
         <h4 class=""><b>Destination: </b><?= request.destination ?></h4>
