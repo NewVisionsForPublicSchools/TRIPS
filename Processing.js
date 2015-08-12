@@ -11,7 +11,7 @@ function getTripActionItems(){
   });
 
   tbf = queue.filter(function(e){
-    return (e.status == 'Approved') || (e.status =='Ordered') || (e.status =='Received');
+    return (e.status == 'Approved') || (e.status =='In Progress');
   });
 
   html = HtmlService.createTemplateFromFile('action_items');
@@ -30,7 +30,7 @@ function getTripsByRole(){
   var test, user, userQuery, roles, keys, requests;
   
 //  user = 'approver2@charter.newvisions.org';
-  user = Session.getActiveUser().getEmail();
+  user = PropertiesService.getUserProperties().getProperty('currentUser');;
   userQuery = 'SELECT roles FROM users WHERE username = "' + user + '"'; 
   roles = NVGAS.getSqlRecords(dbString, userQuery).map(function(e){
     return e.roles;
@@ -70,7 +70,7 @@ function loadNewReqForm(trip_id){
   
   html = HtmlService.createTemplateFromFile('process_new_trip_form');
   html.request = getTrip(trip_id);
-  html.approver = Session.getActiveUser().getEmail();
+  html.approver = PropertiesService.getUserProperties().getProperty('currentUser');;
   debugger;
   return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 }

@@ -1,16 +1,37 @@
-var dbString = '//ga-sql-bootcamp:demodb0615/TRIPS';
+var dbString = PropertiesService.getScriptProperties().getProperty('DBSTRING');
 var userColumns = 'username,roles';
 
 
 
-function validateUser(){
-  var test, currentUser, query, validUser;
+function getCurrentUser(){
+  var test, user;
+  
+  user = Session.getActiveUser().getEmail();
+  
+  if(user){
+    setCurrentUser(user);
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
-  currentUser = Session.getActiveUser().getEmail();
-//  currentUser = 'approver1@charter.newvisions.org';
-  query = 'SELECT * FROM users WHERE username = "' + currentUser + '"';
+
+
+function validateUser(){
+  var test, CURRENTUSER, query, validUser;
+
+  CURRENTUSER = PropertiesService.getUserProperties().getProperty('currentUser');
+  query = 'SELECT * FROM users WHERE username = "' + CURRENTUSER + '"';
   
   validUser = NVGAS.getSqlRecords(dbString, query)[0] ? NVGAS.getSqlRecords(dbString, query)[0].username : "";
 
   return validUser ? true : false;
+}
+
+
+
+function setCurrentUser(email){
+  PropertiesService.getUserProperties().setProperty('currentUser', email);
 }

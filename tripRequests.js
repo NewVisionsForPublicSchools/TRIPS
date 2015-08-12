@@ -11,7 +11,7 @@ function submitNewTripRequest(formObj){
   nextId = PropertiesService.getScriptProperties().getProperty('nextTrpId');
   trip = formObj;
   trip.requested_date = new Date();
-  trip.username = Session.getActiveUser().getEmail();
+  trip.username = PropertiesService.getUserProperties().getProperty('currentUser');;
   trip.id = "AMS4TRP" + nextId.toString();
   trip.trip_date = new Date(trip.trip_date.split("-")[0],trip.trip_date.split("-")[1]-1,trip.trip_date.split("-")[2]);
   
