@@ -1,19 +1,19 @@
 <div id="tiles" class="col-md-10 col-md-offset-4">
   <div class="tile-row text-center row">
-    <div class=<?= 'tile-item item bg-' + newClass ?>>
+    <div id="nrTile" style="<?= role!="BM" ? "" : "display:none" ?>" class=<?= 'tile-item item bg-' + newClass ?>>
       <br>
         <div id="nrBtn" type="button" class="tile well btn btn-default text-center">
           <h1 id="newReqNum" value=<?= nr ?> class=<?= 'text-' + newClass ?>><?= nr ?></h1>
           <h5 class="text-primary text-center"><b><u>To Be Processed</u></b></h5>
         </div>
     </div>
-    <!-- <div id="tbfTile" style="<?= role=="BM" ? "" : "display:none" ?>" class=<?= 'tile-item item bg-' + fulfillClass ?>>
+    <div id="tbfTile" style="<?= role=="BM" ? "" : "display:none" ?>" class=<?= 'tile-item item bg-' + fulfillClass ?>>
       <br>
       <div id="tbfBtn" type="button" class="tile well btn btn-default text-center">
         <h1 class=<?= 'text-' + fulfillClass ?>><?= tbf ?></h1>
-        <h5 class="text-primary text-center"><b><u>To Be Fulfilled</u></b></h5>
+        <h5 class="text-primary text-center"><b><u>Active Trips</u></b></h5>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>
 
@@ -23,29 +23,29 @@
   $(function(){
   
     $('#nrBtn').click(showNewResults);
-//    $('#tbfBtn').click(showToBeFulfilled);
+    $('#tbfBtn').click(showToBeFulfilled);
     
     function showNewResults(){
       google.script.run.withSuccessHandler(displayNewTrips).loadNewTrips();
     }
     
-//    function showToBeFulfilled(){
-//      google.script.run.withSuccessHandler(displayToBeFulfilled).loadToBeFulfilled();
-//    }
-//    
+    function showToBeFulfilled(){
+      google.script.run.withSuccessHandler(displayToBeFulfilled).loadActiveTrips();
+    }
+    
     function displayNewTrips(resultHtml){
       var $output = $('#newRequests');
       $output.html(resultHtml);
       $('.reqData').hide();
       $output.show();
     }
-//    
-//    function displayToBeFulfilled(resultHtml){
-//      var $output = $('#toBeFulfilled');
-//      $output.html(resultHtml);
-//      $('.reqData').hide();
-//      $output.show();
-//    }
+    
+    function displayToBeFulfilled(resultHtml){
+      var $output = $('#toBeFulfilled');
+      $output.html(resultHtml);
+      $('.reqData').hide();
+      $output.show();
+    }
 
   });
 </script>
