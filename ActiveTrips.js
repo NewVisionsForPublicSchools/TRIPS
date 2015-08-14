@@ -21,6 +21,7 @@ function loadActiveForm(trip_id){
   var test, html;
   html = HtmlService.createTemplateFromFile('active_form');
   html.request = getTrip(trip_id);
+  html.cl = getChecklist(trip_id);
   html.approver = PropertiesService.getUserProperties().getProperty('currentUser');
   return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 }

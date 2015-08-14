@@ -78,6 +78,14 @@
           <input type="text" class="form-control col-md-6" name="tbfQueue" id="tbfQueue" style="display:none"
                  value=<?= request.queue ?>>
         </div>
+       
+        <div id="clGroup" style="display:none">
+          <input type="text" class="form-control col-md-6" name="exLunch" id="exLunch" value=<?= cl.lunches ?>>
+          <input type="text" class="form-control col-md-6" name="exBus" id="exBus" value=<?= cl.bus_reservation ?>>
+          <input type="text" class="form-control col-md-6" name="exTrain" id="exTrain" value=<?= cl.train_pass ?>>
+          <input type="text" class="form-control col-md-6" name="exSlip" id="exSlip" value=<?= cl.slip_approval ?>>
+          <input type="text" class="form-control col-md-6" name="exDist" id="exDist" value=<?= cl.slip_distribution ?>>
+        </div>
         
         <div class="pull-center">
           <button class="btn btn-default" id="tbfCancelBtn">Cancel</button>
@@ -95,6 +103,7 @@
   $(function(){
     
     checkTransportation();
+    populateList();
     $('#tbfSubBtn').click(submitList);
     $('#tbfCancelBtn').click(cancelList);
     
@@ -123,7 +132,7 @@
     }
     
     function displayTbfConf(resultHtml){
-      var $output = $('#newReqConfirmation');
+      var $output = $('#processNewTrpConfirmation');
       $output.html(resultHtml);
       $('.reqData').hide();
       $('.reqForm').hide();
@@ -147,6 +156,14 @@
           var status = "In Progress";
         }
         return status;
+    }
+    
+    function populateList(){
+      var $l = $('#exLunch').val() ? $('#lunch').prop('checked', true) : $('#lunch').prop('checked', false);
+      var $b = $('#exBus').val() ? $('#bus').prop('checked', true) : $('#bus').prop('checked', false);
+      var $t = $('#exTrain').val() ? $('#trainPass').prop('checked', true) : $('#trainPass').prop('checked', false);
+      var $s = $('#exSlip').val() ? $('#slipApproval').prop('checked', true) : $('#slipApproval').prop('checked', false);
+      var $d = $('#exDist').val() ? $('#slipDistribution').prop('checked', true) : $('#slipDistribution').prop('checked', false);
     }
     
   });
