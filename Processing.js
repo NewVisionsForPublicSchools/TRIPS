@@ -19,7 +19,7 @@ function getTripActionItems(){
   html.fulfillClass = tbf.length > 0 ? 'nvRed' : 'nvGreen';
   html.nr = nr.length;
   html.tbf = tbf.length;
-  html.role = queue[0].queue;
+  html.ur = getUserRole(PropertiesService.getUserProperties().getProperty('currentUser'));
 
   return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 }

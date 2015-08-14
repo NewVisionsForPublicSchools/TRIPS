@@ -1,13 +1,13 @@
 <div id="tiles" class="col-md-10 col-md-offset-4">
   <div class="tile-row text-center row">
-    <div id="nrTile" style="<?= role!="BM" ? "" : "display:none" ?>" class=<?= 'tile-item item bg-' + newClass ?>>
+    <div id="nrTile" class=<?= 'tile-item item bg-' + newClass ?>>
       <br>
         <div id="nrBtn" type="button" class="tile well btn btn-default text-center">
           <h1 id="newReqNum" value=<?= nr ?> class=<?= 'text-' + newClass ?>><?= nr ?></h1>
           <h5 class="text-primary text-center"><b><u>To Be Processed</u></b></h5>
         </div>
     </div>
-    <div id="tbfTile" style="<?= role=="BM" ? "" : "display:none" ?>" class=<?= 'tile-item item bg-' + fulfillClass ?>>
+    <div id="tbfTile" class=<?= 'tile-item item bg-' + fulfillClass ?>>
       <br>
       <div id="tbfBtn" type="button" class="tile well btn btn-default text-center">
         <h1 class=<?= 'text-' + fulfillClass ?>><?= tbf ?></h1>
@@ -15,13 +15,15 @@
       </div>
     </div>
   </div>
+  <div type="text" id="role" style="display:none"><?= ur.roles ?></div>
 </div>
 
 
 
 <script>
   $(function(){
-  
+    
+    showTiles();
     $('#nrBtn').click(showNewResults);
     $('#tbfBtn').click(showToBeFulfilled);
     
@@ -45,6 +47,18 @@
       $output.html(resultHtml);
       $('.reqData').hide();
       $output.show();
+    }
+    
+    function showTiles(){
+      var $role = $('#role').html();
+      if($role == "BM"){
+        $('#nrTile').hide();
+        $('#tbfTile').show();
+      }
+      else{
+        $('#tbfTile').hide();
+        $('nrTile').show();
+      }
     }
 
   });

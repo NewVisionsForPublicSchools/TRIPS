@@ -35,3 +35,14 @@ function validateUser(){
 function setCurrentUser(email){
   PropertiesService.getUserProperties().setProperty('currentUser', email);
 }
+
+
+
+function getUserRole(user){
+  var test, currentUser, query, userRole;
+  
+  currentUser = user || PropertiesService.getUserProperties().getProperty('currentUser');
+  query = 'SELECT roles FROM users WHERE username = "' + currentUser + '"'
+  userRole = NVGAS.getSqlRecords(dbString, query)[0];
+  return userRole;
+}
