@@ -1,3 +1,7 @@
+var dbString = PropertiesService.getScriptProperties().getProperty('DBSTRING');
+
+
+
 function loadActiveTrips(){
   var test, queue, data, html;
   
@@ -23,31 +27,65 @@ function loadActiveForm(trip_id){
 
 
 
-function processList($formObj){
-//  var test, status, request, query, queryArray, statusQuery, html;
-//
-//  queryArray = [];
-//  status = tbfObj.status;
-//  request = tbfObj.request_id;
-//  query = 'UPDATE Tracking SET status = "' + status + '" WHERE request_id = "' + request + '"';
-//  queryArray.push(query);
-//  
-//  switch(status){
-//    case 'Ordered':
-//      statusQuery = 'UPDATE Tracking SET ordered = "' + new Date() + '" WHERE request_id = "' + request + '"';
+function processList(listObj){
+  var test, status, trip, approver, cl, query, queryArray, statusQuery, qa, html;
+
+  queryArray = [];
+  status = listObj.status;
+  trip = listObj.trip_id;
+  approver = listObj.approver;
+  cl = getChecklist(trip);
+  statusQuery = 'UPDATE tracking SET status = "' + status + '" WHERE trip_id = "' + trip + '"';
+  queryArray.push(statusQuery);
+  
+  switch(status){
+    case 'Completed':
+      queryArray[queryArray.length] = 'UPDATE tracking SET queue = "", completion = "' + new Date() + '" WHERE trip_id = "' + trip + '"';
 //      sendOrderedEmail(request);
-//      break;
-//      
-//    case 'Received':
-//      statusQuery = 'UPDATE Tracking SET received = "' + new Date() + '" WHERE request_id = "' + request + '"';
+      break;
+      
+    case 'In Progress':
 //      sendReceivedEmail(request);
-//      break;
-//      
-//    case 'Fulfilled':
-//      statusQuery = 'UPDATE Tracking SET fulfilled = "' + new Date() + '", queue = "" WHERE request_id = "' + request + '"';
-//      sendFulfilledEmail(request);
-//      break;
-//      
-//    default:
-//      break;
+      break;
+     
+    default:
+      break;
+  }
+  
+  PropertiesService.getScriptProperties().setProperty("TEST", cl);
+  queryArray[queryArray.length] = (cl.lunches == null) && (listObj.lunches == true) ? 'UPDATE checklists SET lunches = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  queryArray[queryArray.length] = (cl.bus_reservation == null) && (listObj.bus_reservation == true) ? 'UPDATE checklists SET bus_reservation = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  queryArray[queryArray.length] = (cl.train_pass == null) && (listObj.train_pass == true) ? 'UPDATE checklists SET train_pass = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  queryArray[queryArray.length] = (cl.slip_approval == null) && (listObj.slip_approval == true) ? 'UPDATE checklists SET slip_approval = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  queryArray[queryArray.length] = (cl.slip_distribution == null) && (listObj.slip_distribution ==true) ? 'UPDATE checklists SET slip_distribution = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  
+  qa = queryArray.filter(function(e){
+    return e != "remove";
+  });
+                         
+  NVGAS.insertSqlRecord(dbString, qa);
+  
+  html = HtmlService.createTemplateFromFile('active_trip_confirmation');
+  html.request = trip;
+  return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+}
+
+
+
+function getChecklist(trip_id){
+  var test, query, data;
+  
+  query = 'SELECT * FROM checklists WHERE trip_id = "' + trip_id + '"'
+  data = NVGAS.getSqlRecords(dbString, query)[0];
+  
+  return data;
+}
+
+
+
+function createChecklist(trip_id){
+  var test, query;
+  
+  query = 'INSERT INTO checklists(trip_id) VALUES("' + trip_id + '")'
+  NVGAS.insertSqlRecord(dbString, [query])
 }

@@ -108,15 +108,17 @@
     
     function submitList(){
       var $formObj = {
-        lunches: $('#lunch').val(),
-        bus_reservation: $('#bus').val(),
-        train_pass: $('#trainPass').val(),
-        slip_approval: $('#slipApproval').val(),
-        slip_distribution: $('#slipDistribution').val(),
+        lunches: $('#lunch').prop('checked') ? true : false,
+        bus_reservation: $('#bus').prop('checked') ? true : false,
+        train_pass: $('#trainPass').prop('checked') ? true : false,
+        slip_approval: $('#slipApproval').prop('checked') ? true : false,
+        slip_distribution: $('#slipDistribution').prop('checked') ? true : false,
         trip_id: $('#tbfId').val(),
-        approver: $('#tbfApprover').val()
+        approver: $('#tbfApprover').val(),
       };
       
+      $formObj.status = checkForCompletion($formObj);
+
       google.script.run.withSuccessHandler(displayTbfConf).processList($formObj);    
     }
     
@@ -134,6 +136,17 @@
         $('#trpFrmTrans').hide();
         $('#trpFrmOthr').show();
       }
+    }
+    
+    function checkForCompletion(formObj){
+      if(formObj.lunches == true && formObj.bus_reservation == true && formObj.train_pass == true && formObj.slip_approval == true
+        && formObj.slip_distribution == true){
+          var status = "Completed";
+        }
+        else{
+          var status = "In Progress";
+        }
+        return status;
     }
     
   });

@@ -10,16 +10,16 @@
       <th class="bg-primary text-center">Total Cost</th>
       <th class="bg-primary text-center">Transportation</th>
       <th class="bg-primary text-center">Status</th>
-      <th class="bg-primary text-center">Trip Details</th>
+      <th class="bg-primary text-center">Checklist</th>
     </tr> <!-- close header row -->
     
     <? for(var i=0;i<data.length;i++){ ?>
       <tr>
         <td><?= data[i].trip_name ?></td>
         <td><?= data[i].description ?></td>
-        <td><?= data[i].trip_date ?></td>
+        <td><?= new Date(data[i].trip_date).toLocaleDateString() ?></td>
         <td><?= data[i].requested_by ?></td>
-        <td><?= data[i].requested_date ?></td>
+        <td><?= new Date(data[i].requested_date).toLocaleDateString() ?></td>
         <td><?= data[i].total_cost ?></td>
         <td><?= data[i].transportation ?></td>
         <td><?= data[i].status ?></td>

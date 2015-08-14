@@ -1,0 +1,34 @@
+<div>
+  <h2 class="text-nvGray">Active Trip Updated</h2>
+  <h4>Congratulations! You have successfully updated <b><?= request ?></b></h4>
+  
+  <div class="pull-center row">
+    <button class="btn btn-danger" type="button" id="homeBtn4">Home</button>
+    <button class="btn btn-primary" id="procReqBtn3">Process Another Trip</button> 
+  </div>
+</div>
+
+
+
+<script>
+  $(function(){
+
+    $('#homeBtn4').click(function(){
+      $('#homeBtn').trigger("click");
+    });
+    
+    $('#procReqBtn3').click(function(){
+      google.script.run.withSuccessHandler(updateActionItems).getTripActionItems();
+      $('#procReqBtn').trigger("click");
+      $('.reqData').hide();
+      $('.reqForm').hide();
+      $('#actionItems').show();
+    });
+    
+   function updateActionItems(resultHtml){
+      var $output = $('#actionItems');
+      $output.html(resultHtml);
+    }  
+
+  });
+</script>

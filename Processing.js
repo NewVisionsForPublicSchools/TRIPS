@@ -116,7 +116,7 @@ function processNewTrpApproval(formObj){
 
 
 function checkApprovalStatus(approvalObj){
-  var test, status, trip, tripId, action;
+  var test, status, trip, tripId, action, checklist;
   
   trip = getTrip(approvalObj.trip_id);
   status = trip.status;
@@ -125,6 +125,7 @@ function checkApprovalStatus(approvalObj){
   switch (status){
     case 'Approved':
       action = trip.queue == "DSO" ? forwardToDso(trip) : sendApprovalEmail(trip);
+      checklist = trip.queue == "BM" ? createChecklist(trip) : null;
       break;
       
     case 'Denied':
