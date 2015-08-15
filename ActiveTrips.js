@@ -53,12 +53,12 @@ function processList(listObj){
       break;
   }
   
-  PropertiesService.getScriptProperties().setProperty("TEST", cl);
   queryArray[queryArray.length] = (cl.lunches == null) && (listObj.lunches == true) ? 'UPDATE checklists SET lunches = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
   queryArray[queryArray.length] = (cl.bus_reservation == null) && (listObj.bus_reservation == true) ? 'UPDATE checklists SET bus_reservation = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
   queryArray[queryArray.length] = (cl.train_pass == null) && (listObj.train_pass == true) ? 'UPDATE checklists SET train_pass = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
   queryArray[queryArray.length] = (cl.slip_approval == null) && (listObj.slip_approval == true) ? 'UPDATE checklists SET slip_approval = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
   queryArray[queryArray.length] = (cl.slip_distribution == null) && (listObj.slip_distribution ==true) ? 'UPDATE checklists SET slip_distribution = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
+  queryArray[queryArray.length] = (cl.consent_form == null) && (listObj.consent_form ==true) ? 'UPDATE checklists SET consent_form = "Completed by ' + approver + ' on ' + new Date() + '" WHERE trip_id = "' + trip + '"' : "remove";
   
   qa = queryArray.filter(function(e){
     return e != "remove";

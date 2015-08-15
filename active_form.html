@@ -62,6 +62,14 @@
         </div> <!-- form-gorup -->
         
         <div class="form-group">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="consentForm">Parent Consent Forms Collected from Requestor
+            </label>
+          </div>
+        </div> <!-- form-gorup -->
+        
+        <div class="form-group">
           <label class="control-label col-md-3" for="tbfId"></label>
           <input type="text" class="form-control col-md-6" name="tbfId" id="tbfId" style="display:none"
                  value=<?= request.trip_id ?>>
@@ -85,6 +93,7 @@
           <input type="text" class="form-control col-md-6" name="exTrain" id="exTrain" value=<?= cl.train_pass ?>>
           <input type="text" class="form-control col-md-6" name="exSlip" id="exSlip" value=<?= cl.slip_approval ?>>
           <input type="text" class="form-control col-md-6" name="exDist" id="exDist" value=<?= cl.slip_distribution ?>>
+          <input type="text" class="form-control col-md-6" name="exConsent" id="exConsent" value=<?= cl.consent_form ?>>
         </div>
         
         <div class="pull-center">
@@ -122,6 +131,7 @@
         train_pass: $('#trainPass').prop('checked') ? true : false,
         slip_approval: $('#slipApproval').prop('checked') ? true : false,
         slip_distribution: $('#slipDistribution').prop('checked') ? true : false,
+        consent_form: $('#consentForm').prop('checked') ? true : false,
         trip_id: $('#tbfId').val(),
         approver: $('#tbfApprover').val(),
       };
@@ -149,7 +159,7 @@
     
     function checkForCompletion(formObj){
       if(formObj.lunches == true && formObj.bus_reservation == true && formObj.train_pass == true && formObj.slip_approval == true
-        && formObj.slip_distribution == true){
+        && formObj.slip_distribution == true && formObj.consent_form == true){
           var status = "Completed";
         }
         else{
@@ -164,6 +174,7 @@
       var $t = $('#exTrain').val() ? $('#trainPass').prop('checked', true) : $('#trainPass').prop('checked', false);
       var $s = $('#exSlip').val() ? $('#slipApproval').prop('checked', true) : $('#slipApproval').prop('checked', false);
       var $d = $('#exDist').val() ? $('#slipDistribution').prop('checked', true) : $('#slipDistribution').prop('checked', false);
+      var $c = $('#exConsent').val() ? $('#consentForm').prop('checked', true) : $('#consentForm').prop('checked', false);
     }
     
   });
