@@ -140,21 +140,21 @@ function checkApprovalStatus(approvalObj){
 
 
 function sendApprovalEmail(tripObj){
-//  var test, trip, recipient, subject, html, template, ccQuery, copyList;
-//  
-//  trip = getTrip(tripObj.trip_id);
-//  recipient = trip.username;
-//  subject = "DO NOT REPLY: Trip Request Approved | " + trip.request_id;
-//  html = HtmlService.createTemplateFromFile('approval_email');
-//  html.request = trip;
-//  template = html.evaluate().getContent();
-//  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%BM%"';
-//  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
-//    return e.username;
-//  }).join();
-//  
-//  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
-//                                            cc: copyList});
+  var test, trip, recipient, subject, html, template, ccQuery, copyList;
+  
+  trip = getTrip(tripObj.trip_id);
+  recipient = trip.username;
+  subject = "DO NOT REPLY: Trip Request Approved | " + trip.trip_id;
+  html = HtmlService.createTemplateFromFile('approval_email');
+  html.request = trip;
+  template = html.evaluate().getContent();
+  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%AP%"';
+  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+    return e.username;
+  }).join();
+  
+  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
+                                            cc: copyList});
 }
 
 
