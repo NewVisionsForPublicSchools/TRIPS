@@ -42,6 +42,7 @@ function processList(listObj){
   switch(status){
     case 'Completed':
       queryArray[queryArray.length] = 'UPDATE tracking SET queue = "", completion = "' + new Date() + '" WHERE trip_id = "' + trip + '"';
+      sendCompletionEmail(trip);
       break;
       
     case 'In Progress':
@@ -130,4 +131,24 @@ function sendChecklistReminder(tripObj){
   
   GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template,
                                                 cc: copyList});
+}
+
+
+
+function sendCompletionEmail(trip_id){
+  var test, request, recipient, subject, html, template, ccQuery, copyList;
+  
+  request = getTrip(trip_id);
+  recipient = request.username;
+  subject = "DO NOT REPLY: Trip Checklist Completed | " + request.trip_id;
+  html = HtmlService.createTemplateFromFile('completion_email');
+  html.request = request;
+  template = html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
+  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%AP%" OR roles LIKE "%BM%"';
+  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+    return e.username;
+  }).join();
+  
+  GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
+                                            cc: copyList});
 }
