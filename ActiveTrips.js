@@ -90,3 +90,29 @@ function createChecklist(trip_id){
   query = 'INSERT INTO checklists(trip_id) VALUES("' + trip_id + '")'
   NVGAS.insertSqlRecord(dbString, [query])
 }
+
+
+
+function checkListReminder(){
+  var test, query, trips;
+  
+  query = 'SELECT * FROM trip_requests r INNER JOIN tracking t ON r.trip_id = t.trip_id INNER JOIN checklists c ON r.trip_id = c.trip_id WHERE t.queue = "BM"';
+  trips = NVGAS.getSqlRecords(dbString, query);
+  
+  trips.forEach(function(e){
+    var tripDate = new Date(e.trip_date).getTime();
+    var currDate = new Date().getTime();
+    if((tripDate - currDate) < 2.592e+8){
+      sendChecklistReminder(e);
+    }
+    return;
+  });
+  debugger;
+}
+
+
+
+function sendChecklistReminder(trip){
+  var test;
+  Logger.log(trip.trip_id);
+}
