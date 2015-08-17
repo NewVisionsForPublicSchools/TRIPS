@@ -101,7 +101,8 @@ function checkListReminder(){
   
   trips.forEach(function(e){
     var tripDate = new Date(e.trip_date).getTime();
-    var currDate = new Date().getTime();
+//    var currDate = new Date().getTime();
+    var currDate = new Date("2015","11","10").getTime();
     if((tripDate - currDate) < 2.592e+8){
       sendChecklistReminder(e);
     }
@@ -112,7 +113,19 @@ function checkListReminder(){
 
 
 
-function sendChecklistReminder(trip){
-  var test;
-  Logger.log(trip.trip_id);
+function sendChecklistReminder(tripObj){
+  var test, trip, recQuery, recipientList, subject, html, template, ccQuery, copyList;
+  
+  trip = tripObj;
+  recQuery = 'SELECT username FROM TRIPS.users WHERE roles LIKE "%BM%"';
+  recipientList = NVGAS.getSqlRecords(dbString, recQuery).map(function(e){
+    return e.username;
+  }).join();
+  subject = "DO NOT REPLY: Trip Checklist Not Completed | " + trip.trip_id;
+  html = HtmlService.createTemplateFromFile('checklist_reminder_email');
+  html.request = trip;
+  html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
+  template = html.evaluate().getContent();
+  
+  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template});
 }

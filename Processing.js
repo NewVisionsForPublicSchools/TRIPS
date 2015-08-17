@@ -116,7 +116,7 @@ function processNewTrpApproval(formObj){
 
 
 function checkApprovalStatus(approvalObj){
-  var test, status, trip, tripId, action, checklist;
+  var test, status, trip, tripId, action, checklist, forward;
   
   trip = getTrip(approvalObj.trip_id);
   status = trip.status;
@@ -126,6 +126,7 @@ function checkApprovalStatus(approvalObj){
     case 'Approved':
       action = trip.queue == "DSO" ? forwardToDso(trip) : sendApprovalEmail(trip);
       checklist = trip.queue == "BM" ? createChecklist(trip) : null;
+      forward = trip.queue == "BM" ? sendChecklist(trip) : null;
       break;
       
     case 'Denied':
@@ -200,4 +201,23 @@ function sendDenialEmail(trip){
   
   GmailApp.sendEmail(recipient, subject,"",{htmlBody: template,
                                             cc: copyList});
+}
+
+
+
+function sendCheckList(tripObj){
+  var test, trip, recQuery, recipientList, subject, html, template, ccQuery, copyList;
+  
+  trip = getTrip(tripObj.trip_id);
+  recQuery = 'SELECT username FROM TRIPS.users WHERE roles LIKE "%BM%"';
+  recipientList = NVGAS.getSqlRecords(dbString, recQuery).map(function(e){
+    return e.username;
+  }).join();
+  subject = "DO NOT REPLY: Trip Request Approved | " + trip.trip_id;
+  html = HtmlService.createTemplateFromFile('new_checklist_alert_email');
+  html.request = trip;
+  html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
+  template = html.evaluate().getContent();
+  
+  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template});
 }
