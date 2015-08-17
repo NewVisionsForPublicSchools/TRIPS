@@ -42,11 +42,9 @@ function processList(listObj){
   switch(status){
     case 'Completed':
       queryArray[queryArray.length] = 'UPDATE tracking SET queue = "", completion = "' + new Date() + '" WHERE trip_id = "' + trip + '"';
-//      sendOrderedEmail(request);
       break;
       
     case 'In Progress':
-//      sendReceivedEmail(request);
       break;
      
     default:
@@ -101,8 +99,7 @@ function checkListReminder(){
   
   trips.forEach(function(e){
     var tripDate = new Date(e.trip_date).getTime();
-//    var currDate = new Date().getTime();
-    var currDate = new Date("2015","11","10").getTime();
+    var currDate = new Date().getTime();
     if((tripDate - currDate) < 2.592e+8){
       sendChecklistReminder(e);
     }
@@ -126,6 +123,11 @@ function sendChecklistReminder(tripObj){
   html.request = trip;
   html.url = PropertiesService.getScriptProperties().getProperty('scriptUrl');
   template = html.evaluate().getContent();
+  ccQuery = 'SELECT username FROM users WHERE roles LIKE "%DSO%" OR roles LIKE "%AP%"';
+  copyList = NVGAS.getSqlRecords(dbString, ccQuery).map(function(e){
+    return e.username;
+  }).join();
   
-  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template});
+  GmailApp.sendEmail(recipientList, subject,"",{htmlBody: template,
+                                                cc: copyList});
 }
