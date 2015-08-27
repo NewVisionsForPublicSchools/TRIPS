@@ -124,13 +124,17 @@ function checkApprovalStatus(approvalObj){
   
   switch (status){
     case 'Approved':
-      action = trip.queue == "DSO" ? forwardToDso(trip) : sendApprovalEmail(trip);
+      action = trip.queue == "BM" ? sendApprovalEmail(trip) : null;
       checklist = trip.queue == "BM" ? createChecklist(trip) : null;
       forward = trip.queue == "BM" ? sendChecklist(trip) : null;
       break;
       
     case 'Denied':
       sendDenialEmail(trip);
+      break;
+      
+    case 'Under Review':
+      forwardToDso(trip);
       break;
       
     default:
