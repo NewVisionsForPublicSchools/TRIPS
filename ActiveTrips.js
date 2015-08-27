@@ -23,6 +23,7 @@ function loadActiveForm(trip_id){
   html.request = getTrip(trip_id);
   html.cl = getChecklist(trip_id);
   html.approver = PropertiesService.getUserProperties().getProperty('currentUser');
+
   return html.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME).getContent();
 }
 
